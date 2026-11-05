@@ -62,8 +62,7 @@ int main() {
 
         if (sensor.getNextDue() < status.getNextDue()) {
            
-            auto now = std::chrono::steady_clock::now();
-            std::this_thread::sleep_until(now + sensor.getSleepTime());
+            std::this_thread::sleep_until(sensor.getNextDue());
 
             std::chrono::duration<float, std::milli> nextDueTimeSensor = sensor.getNextDue() - start;
             std::chrono::duration<float, std::milli> nextDueTimeStatus = status.getNextDue() - start;
@@ -73,6 +72,8 @@ int main() {
             sensor.increaseNextDue(sensor.getSleepTime());
 
         } else {
+
+            std::this_thread::sleep_until(status.getNextDue());
 
             status.increaseNextDue(status.getSleepTime());
             std::cout << " ---- status (WIN) completed 5000ms" << std::endl;
