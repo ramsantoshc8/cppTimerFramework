@@ -26,29 +26,24 @@ int main() {
     Timer medium(std::chrono::milliseconds(500), "medium", start);
     Timer slow(std::chrono::milliseconds(1000), "slow", start);
 
-    if (fast.nextDue < medium.nextDue || fast.nextDue < slow.nextDue) {
-            std::this_thread::sleep_until(fast.nextDue);
+    std::vector<Timer> timerVec = {fast, medium, slow};
 
-            std::chrono::duration<float, std::milli> elapsed = std::chrono::steady_clock::now() - start;
-            std::cout << fast.name << " " << elapsed.count() << std::endl; 
+    
+    for (int i = 0; i < 10; i++) {
+        auto timer = std::min_element(timerVec.begin(), timerVec.end(), 
+        [](Timer &a, Timer &b) {
 
-            fast.nextDue += fast.sleepTime;
-        } else if (medium.nextDue < fast.nextDue || medium.nextDue < slow.nextDue) {
-            
+            if (a.nextDue < b.nextDue) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        std::this_thread::sleep_until(timer->nextDue);
+        timer->nextDue += timer->sleepTime;
 
-            
-
-
-            std::chrono::duration<float, std::milli> elapsed = std::chrono::steady_clock::now() - start;
-            std::cout << medium.name << " " << elapsed.count() << std::endl; 
-
-            medium.nextDue += medium.sleepTime;
-
-        } else if (slow.nextDue < fast.nextDue || slow.nextDue < medium.nextDue) {
-            std::chrono::duration<float, std::milli> elapsed = std::chrono::steady_clock::now() - start;
-            std::cout << slow.name << " " << elapsed.count() << std::endl; 
-
-            slow.nextDue += slow.sleepTime;
- 
-        }
+        auto currTime = std::chrono::steady_clock::now();
+        std::chrono::duration<float, std::milli> timeDiff = currTime - start;
+        std::cout << timer->name << " " << timeDiff.count() << std::endl;
+    }
 }
