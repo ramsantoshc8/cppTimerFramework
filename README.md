@@ -9,6 +9,8 @@ Timers fire at fixed periods without busy-waiting: the program sleeps until the 
 
 | [basicTimer(class)](./basicTimer(class)) | Two timers using a class. Shows how `sleep_for` drifts over time. |
 | [ThreeTimer(struct)](./ThreeTimer(struct)) | Three timers (200 ms, 500 ms, 1000 ms) in a struct and vector. Picks the soonest due timer and uses `sleep_until`, so there's no drift. |
+| [mutexCounter](./mutexCounter) | Two threads racing on a shared counter — demonstrates the race, then fixes it with a mutex. |
+| [producerConsumerQueue](./producerConsumerQueue) | A producer/consumer pair using a mutex + condition variable, no busy-waiting. |
 
 ## Build and run
 

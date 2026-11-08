@@ -1,3 +1,14 @@
+// Runs two periodic timers, a fast "sensor" (500ms) and a slow "status"
+// (5000ms), from a single thread.
+//
+// Each Timer stores its period and the time it is next due. Every loop,
+// main picks whichever timer's due time is soonest, sleeps until exactly
+// that moment with sleep_until (not sleep_for), then fires it and pushes
+// only that timer's due time forward by one period.
+//
+// Because each timer is anchored to a fixed due time rather than "sleep
+// then re-sleep", lateness never accumulates across iterations.
+
 #include <iostream>
 #include <chrono>
 #include <thread>

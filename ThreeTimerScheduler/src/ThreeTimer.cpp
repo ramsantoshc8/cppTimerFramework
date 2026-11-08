@@ -1,3 +1,16 @@
+// threeTimerScheduler
+//
+// A single-threaded scheduler for three periodic timers (200ms, 500ms,
+// 1000ms), all anchored to the same start time.
+//
+// Each round, std::min_element finds the timer with the earliest nextDue,
+// the program sleeps until that time with sleep_until, then only the
+// timer that fired has its nextDue advanced by its own period.
+//
+// This avoids busy-waiting (the thread uses no CPU while asleep) and
+// avoids drift (a timer's schedule is never reset relative to "now",
+// only advanced from its own fixed due time).
+
 #include <iostream>
 #include <chrono>
 #include <thread>
